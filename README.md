@@ -1,4 +1,3 @@
-# ssh-setup
 # Works with ssh and mosh
 
 Setup ssh keys automatically
