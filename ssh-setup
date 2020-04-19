@@ -1,0 +1,23 @@
+#ask for hostname
+read -p "Enter server hostname : " hostname
+read -p "Enter server ssh port : " port
+read -p "Enter server user : " user
+
+#generate ssh key pair
+mkdir -p ~/sshkeys
+ssh-keygen -b 2048 -t rsa -f ~/sshkeys/$user-$hostname -q -N "" 
+
+#copy public key so server
+cat ~/sshkeys/$user-$hostname.pub | ssh $user@$hostname "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys && chmod -R 700 ~/.ssh "
+
+
+#append config to .ssh/config  
+echo "Host $hostname " >> ~/.ssh/config 
+echo "   HostName $hostname " >> ~/.ssh/config 
+echo "   User $user " >>  ~/.ssh/config 
+echo "   Port $port " >> ~/.ssh/config 
+echo "   IdentityFile ~/sshkeys/$user-$hostname "  >> ~/.ssh/config 
+echo ""  >> ~/.ssh/config 
+
+echo "Done, go ahead and connect"
+
